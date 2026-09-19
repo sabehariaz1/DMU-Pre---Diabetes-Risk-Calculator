@@ -1,1 +1,1 @@
-# DMU-Pre---Diabetes-Risk-Calculator
+# DMU-Pre-Diabetes-Risk-Calculator
