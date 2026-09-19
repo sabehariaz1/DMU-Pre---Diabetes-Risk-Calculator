@@ -48,7 +48,31 @@
 
 <style>
   /* Small custom touches Tailwind utility classes don't cleanly cover */
+<script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzrWAlYPlgyPYSdjlpbsNnXJeuwQikirikGfMDZCF8yDi9A4gvh2CemUqmqyge9BN_D0w/exec";
 
+    function submitRiskScore(calculatedScore, category) {
+      const payload = {
+        score: calculatedScore,
+        riskCategory: category
+      };
+
+      fetch(WEB_APP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        console.log("Score successfully logged!");
+      })
+      .catch(error => {
+        console.error("Error logging data:", error);
+      });
+    }
+  </script>
   body {
     background-color: #F7F8FA;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
