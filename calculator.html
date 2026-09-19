@@ -3,110 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pre-Diabetes Risk Assessment</title>
-    <!-- Tailwind CSS for styling -->
+    <title>Pre-Diabetes Risk Calculator</title>
+    <!-- Tailwind CSS Engine -->
     <script src="https://tailwindcss.com"></script>
+    <style>
+        .step-content { display: none; }
+        .step-content.active { display: block; }
+    </style>
 </head>
-<body class="bg-gray-50 py-10 px-4">
+<body class="bg-gray-100 min-h-screen font-sans">
 
-    <!-- Risk Calculator Interface -->
-    <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md space-y-4">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">Pre-Diabetes Risk Assessment</h2>
-
-        <!-- Age Field -->
-        <div>
-            <label for="age" class="block text-sm font-medium text-gray-700">Age</label>
-            <input type="number" id="age" name="age" value="0"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 border p-2">
-        </div>
-
-        <!-- Family History Field -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Do you have a family history of diabetes?</label>
-            <div class="mt-2 space-x-4">
-                <label class="inline-flex items-center">
-                    <input type="radio" name="family_history" value="Yes" class="form-radio">
-                    <span class="ml-2">Yes</span>
-                </label>
-                <label class="inline-flex items-center">
-                    <input type="radio" name="family_history" value="No" class="form-radio" checked>
-                    <span class="ml-2">No</span>
-                </label>
+    <!-- Header Panel -->
+    <div class="bg-slate-900 text-white p-6 shadow-md">
+        <div class="max-w-4xl mx-auto flex items-center space-x-4">
+            <div class="bg-amber-400 p-2 rounded-full text-slate-950 font-bold text-xl">🏆</div>
+            <div>
+                <h1 class="text-xs uppercase tracking-widest text-gray-400 font-semibold">Dubai Medical University</h1>
+                <p class="text-2xl font-bold tracking-tight">Pre-Diabetes Risk Calculator</p>
             </div>
-        </div>
-
-        <!-- Physical Activity Field -->
-        <div>
-            <label for="activity" class="block text-sm font-medium text-gray-700">Do you engage in regular physical activity?</label>
-            <select id="activity" name="physical_activity" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm border p-2">
-                <option value="Yes">Yes (At least 150 mins/week)</option>
-                <option value="No">No</option>
-            </select>
-        </div>
-
-        <!-- Live Score Display Widget Box -->
-        <div class="mt-6 p-4 bg-indigo-50 rounded-md border border-indigo-100 text-center">
-            <span class="block text-sm font-semibold text-indigo-700 uppercase tracking-wider">Your Calculated Risk Score</span>
-            <span id="scoreDisplay" class="text-4xl font-extrabold text-indigo-900">0%</span>
         </div>
     </div>
 
-    <!-- Interactive Auto-Save JavaScript Engine -->
+    <!-- Main Container Layout -->
+    <div class="max-w-3xl mx-auto mt-10 px-4">
+        
+        <!-- Questionnaire Wizard Box -->
+        <div id="quizContainer" class="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+            
+            <!-- Dynamic Progress Tracker Header -->
+            <div class="flex justify-between items-center text-sm font-medium text-gray-500 mb-2">
+                <span id="stepIndicator">Question 1 of 5</span>
+                <span id="percentIndicator">20%</span>
+            </div>
+            <div class="w-full bg-gray-200 h-2 rounded-full mb-8 overflow-hidden">
+                <div id="progressBar" class="bg-amber-500 h-full transition-all duration-300" style="width: 20%"></div>
+            </div>
+
+            <!-- STEP 1: AGE ACCORDING TO STUDY PROTOCOLS -->
+            <div class="step-content active" data-step="1">
+                <h3 class="text-xl font-bold text-gray-800 mb-6">What is your age range?</h3>
+                <div class="space-y-3">
+                    <button type="button" onclick="selectOption('age', 0, 'Under 40')" class="w-full text-left p-4 border rounded-lg hover:bg-slate-50 transition font-medium border-gray-200 text-gray-700">Under 40 years (0 points)</button>
+                    <button type="button" onclick="selectOption('age', 1, '40-49')" class="w-full text-left p-4 border rounded-lg hover:bg-slate-50 transition font-medium border-gray-200 text-gray-700">40–49 years (1 point)</button>
+                    <button type="button" onclick="selectOption('age', 2, '50-59')" class="w-full text-left p-4 border rounded-lg hover:bg-slate-50 transition font-medium border-gray-200 text-gray-700">50–59 years (2 points)</button>
+                    <button type="button" onclick="selectOption('age', 3, '60+')" class="w-full text-left p-4 border rounded-lg hover:bg-slate-50 transition font-medium border-gray-200 text-gray-700">60 years or older (3 points)</button>
+                </div>
+            </div>
+
+            <!-- STEP 2: FAMILY CLINICAL BACKGROUND -->
+            <div class="step-content" data-step="2">
+                <h3 class="text-xl font-bold text-gray-800 mb-6">Do you have a family history of diabetes (parents or siblings)?</h3>
+                <div class="space-y-3">
+                    <button type="button" onclick="selectOption('family', 1, 'Yes')" class="w-full text-left p-4 border rounded-lg hover:bg-slate-50 transition font-medium border-gray-200 text-gray-700">Yes (1 point)</button>
+                    <button type="button" onclick="selectOption('family', 0, 'No')" class="w-full text-left p-4 border rounded-lg hover:bg-slate-50 transition font-medium border-gray-200 text-gray-700">No (0 points)</button>
+                </div>
+            </div>
+
+            <!-- STEP 3: LIFESTYLE & EXERCISE PATTERNS -->
+            <div class="step-content" data-step="3">
+                <h3 class="text-xl font-bold text-gray-800 mb-6">Do you engage in regular physical activity?</h3>
+                <div class="space-y-3">
+                    <button type="button" onclick="selectOption('activity', 0, 'Yes')" class="w-full text-left p-4 border rounded-lg hover:bg-slate-50 transition font-medium border-gray-200 text-gray-700">Yes (At least 150 mins/week - 0 points)</button>
+                    <button type="button" onclick="selectOption('activity', 1, 'No')" class="w-full text-left p-4 border rounded-lg hover:bg-slate-50 transition font-medium border-gray-200 text-gray-700">No (1 point)</button>
+                </div>
+            </div>
+
+            <!-- STEP 4: PHYSICAL METRICS (BMI HEIGHT WEIGHT) -->
+            <div class="step-content" data-step="4">
+                <h3 class="text-xl font-bold text-gray-800 mb-6">Please enter your parameters for BMI analysis:</h3>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-600 mb-1">Weight (kg)</label>
+                        <input type="number" id="weightInput" value="75" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-600 mb-1">Height (cm)</label>
+                        <input type="number" id="heightInput" value="170" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none">
+                    </div>
+                </div>
+                <button type="button" onclick="processBMIStep()" class="w-full bg-slate-800 text-white font-bold py-3 rounded-lg hover:bg-slate-900 transition">Save & Continue</button>
+            </div>
+
+            <!-- STEP 5: WAIST CONFIGURATION SCREEN -->
+            <div class="step-content" data-step="5">
+                <h3 class="text-xl font-bold text-gray-800 mb-2">How would you describe your waist circumference?</h3>
+                <p class="text-sm text-gray-500 mb-6">Measured around the natural waist, above the hip bones.</p>
+                <div class="space-y-3 mb-8">
+                    <button type="button" onclick="selectOption('waist', 0, 'Normal')" class="w-full text-left p-4 border rounded-lg hover:bg-slate-50 transition font-medium border-gray-200 text-gray-700">Normal for my height and sex (0 points)</button>
+                    <button type="button" onclick="selectOption('waist', 1, 'Somewhat elevated')" class="w-full text-left p-4 border rounded-lg hover:bg-slate-50 transition font-medium border-gray-200 text-gray-700">Somewhat elevated (1 point)</button>
+                    <button type="button" onclick="selectOption('waist', 2, 'High')" class="w-full text-left p-4 border rounded-lg hover:bg-slate-50 transition font-medium border-gray-200 text-gray-700">High (e.g., over 40in men / 35in women - 2 points)</button>
+                </div>
+                
+                <!-- Bottom Interface Actions Row -->
+                <div class="flex justify-between items-center border-t pt-4">
+                    <button type="button" onclick="navigateBack()" class="text-gray-600 font-bold hover:underline">Back</button>
+                    <button type="button" onclick="processFinalSubmission()" class="bg-indigo-900 text-white font-semibold py-3 px-6 rounded-md hover:bg-indigo-950 transition">See my results</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ANALYSIS RESULTS SHEET LAYER (HIDDEN INITIALLY) -->
+        <div id="resultsContainer" class="hidden bg-white p-8 rounded-xl shadow-lg border border-gray-100 text-center space-y-6">
+            <span class="text-xs uppercase tracking-wider text-gray-400 font-bold block">Your Estimated Risk Score</span>
+            
+            <div class="inline-block bg-slate-50 border p-6 rounded-xl min-w-[200px]">
+                <div id="scoreDisplay" class="text-6xl font-extrabold text-indigo-900 mb-1">0</div>
+                <div class="text-xs text-gray-400 font-medium uppercase">out of 11 points</div>
+            </div>
+            
+            <div class="text-sm font-medium text-gray-600">
+                Your BMI: <span id="bmiDisplay" class="font-bold text-gray-900">0</span> 
+                (<span id="bmiTierDisplay" class="text-indigo-700 font-semibold">Normal</span>)
+            </div>
+
+            <div id="badgeDisplay" class="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800">
+                Elevated Risk
+            </div>
+
+            <div class="text-left border-t pt-6 max-w-xl mx-auto space-y-4">
+                <h4 class="font-bold text-lg text-red-800">Your results suggest an elevated risk</h4>
+                <p class="text-sm text-gray-600 leading-relaxed">A score above 5 means several common risk factors for pre-diabetes are present. This is not a medical diagnosis, but a valid reason to consult clinical teams regarding testing protocols (A1C or fasting blood glucose markers).</p>
+            </div>
+        </div>
+
+        <!-- Academic Disclaimer Footnotes -->
+        <p class="text-center text-[10px] text-gray-400 mt-8 mb-12">© 2026 Dubai Medical University. For educational screening purposes only. Not a substitute for professional medical advice.</p>
+    </div>
+
+    <!-- Active Program Operations Script -->
     <script>
-        let saveTimeout = null;
+        let currentStep = 1;
+        
+        // Memory variables map state storage for study analysis
+        let researchDatabase = {
+            agePoints: 0, ageText: "",
+            familyPoints: 0, familyText: "",
+            activityPoints: 0, activityText: "",
+            waistPoints: 0, waistText: "",
+            calculatedBMI: 0, bmiTier: ""
+        };
 
-        // Function that automatically calculates points
-        function calculateAndAutoSave() {
-            const ageInput = document.getElementById('age').value;
-            const age = ageInput ? parseInt(ageInput) : 0;
-            const familyHistory = document.querySelector('input[name="family_history"]:checked').value;
-            const physicalActivity = document.getElementById('activity').value;
-
-            // Math Logic
-            let points = 0;
-            if (age >= 40) points += 2;
-            if (familyHistory === "Yes") points += 2;
-            if (physicalActivity === "No") points += 1;
-            const finalRiskScore = (points / 5) * 100;
-
-            // Dynamically update display text on the user screen instantly
-            document.getElementById('scoreDisplay').innerText = finalRiskScore + "%";
-
-            // Clear any old pending saves while the user is actively clicking fields
-            clearTimeout(saveTimeout);
-
-            // Wait 2.5 seconds after their last input change, then silently push data
-            saveTimeout = setTimeout(() => {
-                const dataPayload = {
-                    timestamp: new Date().toISOString(),
-                    age: age,
-                    family_history: familyHistory,
-                    physical_activity: physicalActivity,
-                    score: finalRiskScore + "%"
-                };
-
-                // ⚠️ PASTE YOUR COPIED GOOGLE WEB APP URL HERE FROM PREVIOUS STEP
-                const storageUrl = "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE";
-
-                if (storageUrl !== "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE") {
-                    fetch(storageUrl, {
-                        method: "POST",
-                        mode: "no-cors",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(dataPayload)
-                    })
-                    .then(() => console.log("Metrics securely archived to spreadsheet matrix."))
-                    .catch(err => console.error("Sync error:", err));
-                }
-            }, 2500); 
-        }
-
-        // Listen for live adjustments across every interactive element
-        document.getElementById('age').addEventListener('input', calculateAndAutoSave);
-        document.getElementById('activity').addEventListener('change', calculateAndAutoSave);
-        document.querySelectorAll('input[name="family_history"]').forEach(radio => {
-            radio.addEventListener('change', calculateAndAutoSave);
-        });
-    </script>
-</body>
-</html>
+        function updateWizardUI() {
+            document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
